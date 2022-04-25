@@ -1,6 +1,18 @@
+using Microsoft.EntityFrameworkCore;
+
+using MovieCrud.Entity;
+using MovieCrud.Models;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddDbContext<MovieContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+// TODO: Kolla om typeof()( verkligen behövs
+// TODO: Vill vi ha Transient eller Scoped?
+builder.Services.AddTransient(typeof(IRepository<>), typeof(Repository<>));
+
 builder.Services.AddRazorPages();
 
 var app = builder.Build();
